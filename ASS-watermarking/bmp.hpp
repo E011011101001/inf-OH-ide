@@ -36,6 +36,6 @@ class BMP {
     ByteString          _pixelData;
     unsigned int _numColors;
 public:
-    BMP(std::string bmpFilePath);
+    explicit BMP(const std::string& bmpFilePath);
     ~BMP();
 };

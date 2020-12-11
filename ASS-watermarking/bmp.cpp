@@ -9,19 +9,23 @@ std::ifstream& operator>>(
     ByteString& bytes
 ) {
     while (!in.eof()) {
-        bytes += in.get();
+        bytes += static_cast<Byte>(in.get());
     }
     return in;
 }
 
-BMP::BMP(
-    std::string bmpFilePath
-) {
+BMP::BMP(const std::string& bmpFilePath) :
+    _header {},
+    _infoHeader {},
+    _colorTable {nullptr},
+    _pixelData {},
+    _numColors {0}
+{
     std::ifstream fin { bmpFilePath };
     fin.read(reinterpret_cast<char*>(&_header), 14);
 
     fin.read(reinterpret_cast<char*>(&_infoHeader), 40);
-    _numColors = (1 << _infoHeader.bitsPerPixel);
+    _numColors = 1U << _infoHeader.bitsPerPixel;
 
     size_t colorTableSize { _header.dataOffset - 0x36 };
     _colorTable = new ColorTableItem[colorTableSize / 4];
