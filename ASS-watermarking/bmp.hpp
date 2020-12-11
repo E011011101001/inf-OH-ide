@@ -5,6 +5,7 @@ using Byte = unsigned char;
 using ByteString = std::basic_string<Byte>;
 
 std::ifstream& operator>>(std::ifstream& in, ByteString& bytes);
+std::ofstream& operator<<(std::ofstream& out, ByteString& bytes);
 
 struct __attribute__ ((__packed__)) BitmapHeader {
     Byte        signature[2];  // = "BM"
@@ -33,9 +34,12 @@ class BMP {
     BitmapHeader        _header;
     BitmapInfoHeader    _infoHeader;
     ColorTableItem*          _colorTable;
+    size_t              _colorTableSize;
     ByteString          _pixelData;
     unsigned int _numColors;
 public:
     explicit BMP(const std::string& bmpFilePath);
+    ByteString get_raw_string() const;
     ~BMP();
 };
+
